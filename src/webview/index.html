@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Code Assistant</title>
+    <link rel="stylesheet" href="{{styleUri}}">
+</head>
+<body>
+    <div id="chat-container">
+        <div id="messages">
+            <div class="message system">
+                Hello! I am your AI Code Assistant. Open a file and ask me to analyze or fix it.
+            </div>
+        </div>
+        <div id="input-area">
+            <button id="attach-btn" title="Attach files">📎</button>
+            <textarea id="message-input" placeholder="Ask something... (e.g., 'Fix the bug in this function')"></textarea>
+            <button id="send-btn">Send</button>
+        </div>
+        <div id="attached-files"></div>
+    </div>
+    <script src="{{scriptUri}}"></script>
+</body>
+</html>
