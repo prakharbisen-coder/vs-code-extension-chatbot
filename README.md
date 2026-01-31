@@ -22,10 +22,162 @@ An AI-powered coding assistant for VS Code using Google's Gemini API. This intel
 
 ## Usage
 
-### Opening the Chat
-- Press `Ctrl+Shift+P`
-- Type "Gemini Coder: Open Chat"
-- Chat panel opens on the right side
+### Opening the Chatbot - Complete Guide
+
+#### **Method 1: Using Command Palette (Recommended)**
+
+1. **Open Command Palette**
+   - **Windows/Linux**: Press `Ctrl+Shift+P`
+   - **Mac**: Press `Cmd+Shift+P`
+   - This opens VS Code's command search bar at the top
+
+2. **Search for the Command**
+   - Type: `Gemini Coder` or just `Open Chat`
+   - As you type, VS Code filters available commands
+   - You'll see: **"Gemini Coder: Open Chat"** in the dropdown
+
+3. **Execute the Command**
+   - Click on "Gemini Coder: Open Chat" with your mouse
+   - OR press `Enter` when it's highlighted
+   - The command appears in the list because it's registered in the extension
+
+4. **Chat Interface Opens**
+   - A new panel appears on the **right side** of VS Code (Column Two)
+   - The panel is titled **"AI Code Assistant"**
+   - You'll see:
+     - Welcome message: "Hello! I am your AI Code Assistant..."
+     - Message history area (initially shows welcome message)
+     - Text input box at the bottom with placeholder text
+     - 📎 **Attach button** on the left of input
+     - **Send button** on the right of input
+
+#### **What Happens Behind the Scenes:**
+
+When you execute "Gemini Coder: Open Chat":
+
+1. **Extension Activation**
+   ```
+   extension.js → activate() function called
+   ↓
+   Command "aibot.openChat" is registered
+   ↓
+   VS Code listens for this command
+   ```
+
+2. **Webview Creation**
+   ```
+   vscode.window.createWebviewPanel() is called
+   ↓
+   Creates a new panel in Column Two (side panel)
+   ↓
+   Loads HTML/CSS/JS from src/webview/ folder
+   ↓
+   Establishes secure message passing between webview and extension
+   ```
+
+3. **Interface Initialization**
+   ```
+   index.html loaded → Chat container created
+   ↓
+   style.css applied → VS Code theme colors applied
+   ↓
+   script.js executes → Event listeners attached
+   ↓
+   Ready to receive user input
+   ```
+
+#### **Troubleshooting: If Chat Doesn't Open**
+
+**Issue 1: Command Not Found**
+- **Cause**: Extension not installed or not activated
+- **Solution**: 
+  1. Check if you're in the Extension Development Host window (when testing)
+  2. Or ensure extension is installed from VSIX package
+  3. Restart VS Code
+
+**Issue 2: Extension Development Mode**
+- **For Developers Testing the Extension**:
+  1. Open the project folder in VS Code
+  2. Press `F5` to start debugging
+  3. A new VS Code window opens (titled "[Extension Development Host]")
+  4. **IMPORTANT**: Use the NEW window, not your original one
+  5. In the new window, press `Ctrl+Shift+P` and open the chat
+  6. The extension only works in the Extension Development Host window
+
+**Issue 3: Chat Opens But Shows Error**
+- **Cause**: API key not configured
+- **Solution**: See "Initial Setup" section below
+
+#### **First Time Setup Requirements**
+
+Before the chatbot can respond to your messages:
+
+1. **Get Gemini API Key** (One-time setup)
+   - Visit: https://aistudio.google.com/apikey
+   - Sign in with Google account
+   - Click "Create API Key"
+   - Copy the key (starts with `AIzaSy...`)
+
+2. **Configure API Key** (Choose one method):
+
+   **Option A: Via VS Code Settings (Recommended for regular use)**
+   ```
+   1. Press Ctrl+, to open Settings
+   2. Type "Gemini Coder" in search box
+   3. Find "Aibot: Gemini Api Key"
+   4. Paste your API key
+   5. Settings auto-save
+   ```
+
+   **Option B: Via .env File (Recommended for development)**
+   ```
+   1. Create a file named ".env" in the extension root folder
+   2. Add this line: GEMINI_API_KEY=your_actual_key_here
+   3. Save the file
+   4. Extension reads this on startup
+   ```
+
+3. **Verify Setup**
+   - Open the chat
+   - Type "Hello" and press Enter
+   - If configured correctly, AI responds within 2-3 seconds
+   - If you see "API Key not set" error, revisit step 2
+
+#### **Understanding the Chat Interface**
+
+Once opened, here's what you see:
+
+```
+┌─────────────────────────────────────────────────┐
+│ AI Code Assistant                          ✕    │ ← Title bar
+├─────────────────────────────────────────────────┤
+│ ┌─────────────────────────────────────────────┐ │
+│ │ Hello! I am your AI Code Assistant...      │ │ ← Welcome message
+│ │ Open a file and ask me to analyze or fix.  │ │
+│ └─────────────────────────────────────────────┘ │
+│                                                 │
+│ ┌─────────────────────────────────────────────┐ │
+│ │ Your Message                                │ │ ← Your messages
+│ └─────────────────────────────────────────────┘ │   (right-aligned, blue)
+│                                                 │
+│ ┌─────────────────────────────────────────────┐ │
+│ │ AI Response with explanations...            │ │ ← Bot responses
+│ └─────────────────────────────────────────────┘ │   (left-aligned, gray)
+│                                                 │
+├─────────────────────────────────────────────────┤
+│ [📎] [Type your message here...        ] [Send] │ ← Input area
+└─────────────────────────────────────────────────┘
+     ↑                                         ↑
+  Attach files                              Send message
+```
+
+#### **Panel Features:**
+
+- **Resizable**: Drag the edge to resize
+- **Movable**: Can be moved to different panel positions
+- **Retains Context**: Chat history persists while panel is open
+- **Auto-scroll**: Automatically scrolls to new messages
+- **Theme Aware**: Colors match your VS Code theme (dark/light)
 
 ### Attaching Files
 1. Click the **📎 button** in the chat
